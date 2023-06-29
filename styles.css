@@ -1,0 +1,9 @@
+#gameboard{
+    display:grid;
+    grid-template-columns: repeat(3, 100px);
+    justify-content: center;
+    text-align: center;
+}
+.grid{
+    border: 1px solid black;
+}
