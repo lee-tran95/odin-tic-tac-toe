@@ -6,4 +6,10 @@
 }
 .grid{
     border: 1px solid black;
+    padding: 10px
+}
+#selections{
+    display: flex;
+    justify-content: center;
+    padding: 10px;
 }

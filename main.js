@@ -1,9 +1,28 @@
+const startButton = document.getElementById('start-button')
+const grid = document.querySelectorAll('.grid')
+startButton.addEventListener('click', () =>{
+    DisplayController.start()
+})
+
+Array.from(grid), grid =>{
+    grid.addEventListener("click", DisplayController.mark)
+}
+
 const Gameboard = (() =>{
     const gameBoard = 
-        [1,2,3,
-         4,5,6,
-         7,8,9,]
-    return {gameBoard}
+        [' ',' ',' ',
+         ' ',' ',' ',
+         ' ',' ',' ']
+
+    const displayBoard = () =>{
+        Array.from(document.querySelectorAll(".grid"), (grid,index) =>{
+            grid.textContent = board[index]
+        })
+    }
+    return {
+        gameBoard,
+        displayBoard
+    }
 })()
 
 const PlayerFactory = (name, marker) =>{
@@ -11,17 +30,22 @@ const PlayerFactory = (name, marker) =>{
 };
 
 const DisplayController = (() =>{
-    const board = Gameboard.gameBoard
-    let turn = 1;
+    const players = []
+    let currentPlayer = 0;
+    let gameOver = false;
 
-    const displayBoard = (() =>{
-        Array.from(document.querySelectorAll(".grid"), (grid,index) =>{
-            grid.textContent = board[index]
-        })
-    })()
+    const start = () =>{
+        let player1 = PlayerFactory(document.getElementById('player1').value, 'X')
+        let player2 = PlayerFactory(document.getElementById('player2').value, 'O')
+        players.push(player1, player2)
+        Gameboard.displayBoard
 
-    // const PlayTurn = (())
-    return {
-        displayBoard
+    }
+
+    const mark = () => {
+
+    }
+    return{
+        start
     }
 })();
