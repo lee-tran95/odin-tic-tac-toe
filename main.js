@@ -12,10 +12,8 @@ const Gameboard = (() =>{
 
     const displayBoard = () =>{
         Array.from(document.querySelectorAll(".grid"), (grid,index) =>{
+            grid.addEventListener("click", DisplayController.mark)
             grid.textContent = gameBoard[index]
-            grid.addEventListener("click", () =>{
-                console.log(index)
-            })
         })
     }
     return {
@@ -30,21 +28,28 @@ const PlayerFactory = (name, marker) =>{
 
 const DisplayController = (() =>{
     const players = []
-    let currentPlayer = 0;
-    let gameOver = false;
+    let currentPlayer;
+    let gameOver;
 
     const start = () =>{
         let player1 = PlayerFactory(document.getElementById('player1').value, 'X')
         let player2 = PlayerFactory(document.getElementById('player2').value, 'O')
         players.push(player1, player2)
+        currentPlayer = 0;
+        gameOver = false
         Gameboard.displayBoard()
-
     }
 
-    const mark = () => {
-
+    const mark = (event) => {
+        if(event.target.textContent === 'X' || event.target.textContent === 'O'){
+            return
+        }
+        Gameboard.gameBoard[event.target.dataset.index] = players[currentPlayer].marker
+        currentPlayer = currentPlayer === 0 ? 1 : 0
+        Gameboard.displayBoard()
     }
     return{
-        start
+        start,
+        mark
     }
 })();
