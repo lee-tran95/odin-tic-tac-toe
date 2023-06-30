@@ -5,13 +5,19 @@
     text-align: center;
 }
 .grid{
+    height: 100px;
+    box-sizing: border-box;
     border: 1px solid black;
-    padding: 40px;
     text-align: center;
+    padding: 40px;
 }
 #selections{
     display: flex;
-    flex-direction: column;
     justify-content: center;
+    margin: 10px;
     padding: 10px;
+}
+
+#selections input {
+    margin: 0px 10px;
 }
