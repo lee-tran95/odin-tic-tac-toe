@@ -6,10 +6,12 @@
 }
 .grid{
     border: 1px solid black;
-    padding: 10px
+    padding: 40px;
+    text-align: center;
 }
 #selections{
     display: flex;
+    flex-direction: column;
     justify-content: center;
     padding: 10px;
 }
