@@ -29,6 +29,7 @@ const PlayerFactory = (name, marker) =>{
 const DisplayController = (() =>{
     const players = []
     let currentPlayer;
+    let turns;
     let gameOver;
 
     const start = () =>{
@@ -36,6 +37,7 @@ const DisplayController = (() =>{
         let player1 = PlayerFactory(document.getElementById('player1').value || "1", 'X')
         let player2 = PlayerFactory(document.getElementById('player2').value || "2", 'O')
         players.push(player1, player2)
+        turns = 1;
         currentPlayer = 0;
         gameOver = false
         Gameboard.displayBoard()
@@ -46,12 +48,18 @@ const DisplayController = (() =>{
             return
         }
         Gameboard.gameBoard[event.target.dataset.index] = players[currentPlayer].marker
+        turns++
         Gameboard.displayBoard()
         if(winConditions()){
-            document.getElementById('winner-message').textContent = `Player ${players[currentPlayer].name} Wins!`
+            document.getElementById('message').textContent = `Player ${players[currentPlayer].name} Wins!`
+            gameOver = true
+        }
+        if(!winConditions() && turns > 9){
+            document.getElementById('message').textContent = "It's a tie! Click the reset button to play again"
             gameOver = true
         }
         currentPlayer = currentPlayer === 0 ? 1 : 0
+        
     }
 
     const winConditions = () =>{
