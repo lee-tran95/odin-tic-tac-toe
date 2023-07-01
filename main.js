@@ -5,20 +5,25 @@ startButton.addEventListener('click', () =>{
 
 
 const Gameboard = (() =>{
-    const gameBoard = 
+    let gameBoard = 
         ['','','',
          '','','',
          '','','']
 
     const displayBoard = () =>{
+        console.log(gameBoard)
         Array.from(document.querySelectorAll(".grid"), (grid,index) =>{
-            grid.addEventListener("click", DisplayController.mark)
             grid.textContent = gameBoard[index]
         })
     }
+
+    const update = (index, value) =>{
+        gameBoard[index] = value
+    }
     return {
         gameBoard,
-        displayBoard
+        displayBoard,
+        update
     }
 })()
 
@@ -27,19 +32,35 @@ const PlayerFactory = (name, marker) =>{
 };
 
 const DisplayController = (() =>{
-    const players = []
+    const startButton = document.getElementById('start-button')
+    const resetButton = document.getElementById('reset-button')
+    startButton.addEventListener('click', () =>{
+        DisplayController.start()
+    })
+    resetButton.addEventListener('click', () =>{
+        DisplayController.reset()
+    })
+    
+    let players = []
     let currentPlayer;
     let turns;
     let gameOver;
 
     const start = () =>{
         if(players.length > 0) return
+
+        Array.from(document.querySelectorAll(".grid"), grid =>{
+            grid.addEventListener("click", DisplayController.mark)
+        })
+
         let player1 = PlayerFactory(document.getElementById('player1').value || "1", 'X')
         let player2 = PlayerFactory(document.getElementById('player2').value || "2", 'O')
         players.push(player1, player2)
         turns = 1;
         currentPlayer = 0;
         gameOver = false
+
+
         Gameboard.displayBoard()
     }
 
@@ -47,19 +68,37 @@ const DisplayController = (() =>{
         if(event.target.textContent === 'X' || event.target.textContent === 'O' || gameOver){
             return
         }
-        Gameboard.gameBoard[event.target.dataset.index] = players[currentPlayer].marker
+        Gameboard.update(event.target.dataset.index, players[currentPlayer].marker)
         turns++
         Gameboard.displayBoard()
         if(winConditions()){
-            document.getElementById('message').textContent = `Player ${players[currentPlayer].name} Wins!`
-            gameOver = true
+            displayWinner()
         }
         if(!winConditions() && turns > 9){
-            document.getElementById('message').textContent = "It's a tie! Click the reset button to play again"
-            gameOver = true
+            displayTie()
         }
         currentPlayer = currentPlayer === 0 ? 1 : 0
         
+    }
+
+    const displayWinner = () => {
+        document.getElementById('message').textContent = `Player ${players[currentPlayer].name} Wins!`
+        gameOver = true
+    }
+    const displayTie = () => {
+        document.getElementById('message').textContent = "It's a tie! Click the reset button to play again"
+        gameOver = true
+    }
+    const reset = () =>{
+        players = []
+        gameOver = false
+        turns = 1;
+        currentPlayer = 0
+        document.getElementById('message').textContent = ''
+        for(let i = 0; i < 9; i++){
+            Gameboard.update(i, '')
+        }
+        Gameboard.displayBoard()
     }
 
     const winConditions = () =>{
@@ -84,6 +123,9 @@ const DisplayController = (() =>{
     return{
         start,
         mark,
-        winConditions
+        winConditions,
+        displayWinner,
+        displayTie,
+        reset
     }
 })();
